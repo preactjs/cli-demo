@@ -16,6 +16,9 @@ export default function async(load) {
 					component = (mod && mod.default) || mod;
 					this.componentDidCatch = null;
 					this.setState({});
+					// this is suboptimal since it forces suspended child trees to re-suspend.
+					// HOWEVER: it's very important that doing this does not break.
+					// this.forceUpdate();
 				});
 			};
 			this.componentDidCatch = err => {
