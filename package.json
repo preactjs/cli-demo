@@ -5,10 +5,10 @@
   "license": "MIT",
   "scripts": {
     "start": "per-env",
-    "start:production": "npm run -s serve",
+    "start:production": "npm run -s build && npm run -s serve",
     "start:development": "npm run -s dev",
     "build": "preact build --prerender-urls prerender-urls.json --no-esm --no-compress",
-    "serve": "preact build && preact serve",
+    "serve": "http-server -s -c-1 build",
     "dev": "preact watch",
     "lint": "eslint src",
     "test": "jest"
@@ -22,6 +22,7 @@
   "devDependencies": {
     "eslint": "^4.9.0",
     "eslint-config-synacor": "^2.0.2",
+    "http-server": "^0.12.1",
     "jest": "^21.2.1",
     "jest-preset-preact": "^1.0.0",
     "per-env": "^1.0.2",
