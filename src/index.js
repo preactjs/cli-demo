@@ -22,24 +22,37 @@ import App from './components/app';
 if (typeof window !== 'undefined') {
 	const observer = new MutationObserver(records => {
 		for (let mutation of records) {
-			if (mutation.attributeName) {
-				console.log(mutation.target, `.setAttribute("${mutation.attributeName}", "${mutation.target.getAttribute(mutation.attributeName)}")`);
+			if (mutation.type === 'characterData') {
+				console.log('Setting text: ', mutation.target, ` (was ${mutation.oldValue})`);
 			}
-			if (mutation.addedNodes.length) {
-				for (let node of mutation.addedNodes) console.log(mutation.target, '.append(', node, ')');
+			else if (mutation.attributeName) {
+				console.log(mutation.target, `.setAttribute("${mutation.attributeName}", "${mutation.target.getAttribute(mutation.attributeName)}")  (was ${mutation.oldValue})`);
 			}
-			if (mutation.removedNodes.length) {
-				for (let node of mutation.removedNodes) console.log(node, '.remove()');
+			else {
+				if (mutation.addedNodes.length) {
+					for (let node of mutation.addedNodes) console.log(mutation.target, '.append(', node, ')');
+				}
+				if (mutation.removedNodes.length) {
+					for (let node of mutation.removedNodes) console.log(node, '.remove()');
+				}
 			}
 		}
 	});
 	observer.observe(document.body, {
 		attributes: true,
+		attributeOldValue: true,
 		childList: true,
+		characterData: true,
+		characterDataOldValue: true,
 		subtree: true
 	});
 
 	console.log('BOOTED');
+
+	setTimeout(() => {
+		console.log('stopping observer');
+		observer.disconnect();
+	}, 10000);
 }
 
 
